@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumo - Orçamento App</title>
+    <title>Resumo</title>
+
     <link rel="stylesheet" href="style.css">
-    <link id="tema-dark" rel="stylesheet" href="dark.css" disabled>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -14,35 +14,41 @@
 <header>Resumo</header>
 
 <div class="container">
+
     <div class="card">
-        <h2>Visão geral</h2>
+        <h2>Despesas por categoria</h2>
         <canvas id="grafico"></canvas>
     </div>
 
     <div class="card">
         <a href="index.html"><button>Voltar</button></a>
     </div>
+
 </div>
 
+<script src="db.js"></script>
+
 <script>
-const ctx = document.getElementById('grafico');
+listarDespesas(despesas => {
+    const categorias = {};
 
-const total = parseFloat(localStorage.getItem("total") || "0");
+    despesas.forEach(d => {
+        categorias[d.categoria] = (categorias[d.categoria] || 0) + d.valor;
+    });
 
-new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Despesas'],
-        datasets: [{
-            data: [total],
-            backgroundColor: ['#0EA5E9']
-        }]
-    },
-    options: {
-        plugins: {
-            legend: { display: true }
+    new Chart(document.getElementById("grafico"), {
+        type: "doughnut",
+        data: {
+            labels: Object.keys(categorias),
+            datasets: [{
+                data: Object.values(categorias),
+                backgroundColor: [
+                    "#0EA5E9", "#38BDF8", "#0284C7",
+                    "#0C4A6E", "#0369A1", "#7DD3FC"
+                ]
+            }]
         }
-    }
+    });
 });
 </script>
 
