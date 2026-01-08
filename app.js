@@ -37,3 +37,11 @@ function adicionar() {
         carregarDespesas();
     }
 }
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
+
+function ativarTemaEscuro(ativo) {
+    document.getElementById("tema-dark").disabled = !ativo;
+}
+
