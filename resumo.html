@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo - Orçamento App</title>
+    <link rel="stylesheet" href="style.css">
+    <link id="tema-dark" rel="stylesheet" href="dark.css" disabled>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header>Resumo</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Visão geral</h2>
+        <canvas id="grafico"></canvas>
+    </div>
+
+    <div class="card">
+        <a href="index.html"><button>Voltar</button></a>
+    </div>
+</div>
+
+<script>
+const ctx = document.getElementById('grafico');
+
+const total = parseFloat(localStorage.getItem("total") || "0");
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Despesas'],
+        datasets: [{
+            data: [total],
+            backgroundColor: ['#0EA5E9']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: true }
+        }
+    }
+});
+</script>
+
+</body>
+</html>

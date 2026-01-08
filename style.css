@@ -1,0 +1,116 @@
+:root {
+    --bg: #d9f1ff;
+    --card: #e8f6ff;
+    --text: #0a3d62;
+    --primary: #0EA5E9;
+    --shadow-light: #ffffff;
+    --shadow-dark: #b5d9ec;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    background: var(--bg);
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary);
+    box-shadow: 8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+}
+
+.card h2 {
+    margin: 0 0 15px;
+    color: var(--primary);
+}
+
+input, button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    border: none;
+    margin-top: 10px;
+    font-size: 16px;
+    outline: none;
+    background: var(--card);
+    box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                inset -6px -6px 12px var(--shadow-light);
+}
+
+button {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    box-shadow: 6px 6px 12px #0b7bb0,
+                -6px -6px 12px #4ecbff;
+}
+
+button:active {
+    box-shadow: inset 6px 6px 12px #0b7bb0,
+                inset -6px -6px 12px #4ecbff;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--card);
+    margin-bottom: 12px;
+    box-shadow: 6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+}
+
+.valor {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.top-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.top-actions a {
+    flex: 1;
+    text-decoration: none;
+}
+
+.logo-animada {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+    display: block;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.3); }
+    100% { transform: scale(1); filter: brightness(1); }
+}

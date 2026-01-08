@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Orçamento App</title>
+
+    <meta name="theme-color" content="#0EA5E9" />
+    <link rel="manifest" href="manifest.json" />
+
+    <link rel="icon" sizes="192x192" href="icon-192.png">
+    <link rel="icon" sizes="512x512" href="icon-512.png">
+
+    <link rel="stylesheet" href="style.css">
+    <link id="tema-dark" rel="stylesheet" href="dark.css" disabled>
+</head>
+
+<body>
+
+<header>Orçamento App</header>
+
+<div class="container">
+
+    <img src="icon-192.png" alt="Logo" class="logo-animada">
+
+    <div class="top-actions">
+        <a href="resumo.html"><button>Resumo</button></a>
+        <button onclick="sair()">Sair</button>
+    </div>
+
+    <div class="card">
+        <h2>Adicionar Despesa</h2>
+
+        <input type="text" id="descricao" placeholder="Descrição da despesa">
+        <input type="number" id="valor" placeholder="Valor (R$)">
+        <button onclick="adicionar()">Adicionar</button>
+    </div>
+
+    <div class="card">
+        <h2>Lista de Despesas</h2>
+        <div id="lista"></div>
+    </div>
+
+</div>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+function carregarDespesas() {
+    listarDespesas(despesas => {
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+        let total = 0;
+
+        despesas.forEach(d => {
+            total += d.valor;
+            const item = document.createElement("div");
+            item.className = "item";
+            item.innerHTML = `
+                <span>${d.descricao}</span>
+                <span class="valor">R$ ${d.valor.toFixed(2)}</span>
+            `;
+            lista.appendChild(item);
+        });
+
+        localStorage.setItem("total", total);
+    });
+}
+
+function sair() {
+    localStorage.removeItem("logado");
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
