@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orçamento App</title>
-
-    <meta name="theme-color" content="#0EA5E9" />
-    <link rel="manifest" href="manifest.json" />
-
-    <link rel="icon" sizes="192x192" href="icon-192.png">
-    <link rel="icon" sizes="512x512" href="icon-512.png">
 
     <link rel="stylesheet" href="style.css">
     <link id="tema-dark" rel="stylesheet" href="dark.css" disabled>
@@ -22,8 +15,6 @@
 
 <div class="container">
 
-    <img src="icon-192.png" alt="Logo" class="logo-animada">
-
     <div class="top-actions">
         <a href="resumo.html"><button>Resumo</button></a>
         <button onclick="sair()">Sair</button>
@@ -32,9 +23,36 @@
     <div class="card">
         <h2>Adicionar Despesa</h2>
 
-        <input type="text" id="descricao" placeholder="Descrição da despesa">
+        <input type="text" id="descricao" placeholder="Descrição">
         <input type="number" id="valor" placeholder="Valor (R$)">
+
+        <select id="categoria"></select>
+
+        <button onclick="novaCategoria()">Nova categoria</button>
         <button onclick="adicionar()">Adicionar</button>
+    </div>
+
+    <div class="card">
+        <h2>Filtros</h2>
+
+        <input type="date" id="filtroData">
+        <select id="filtroMes">
+            <option value="">Mês</option>
+            <option value="01">Janeiro</option>
+            <option value="02">Fevereiro</option>
+            <option value="03">Março</option>
+            <option value="04">Abril</option>
+            <option value="05">Maio</option>
+            <option value="06">Junho</option>
+            <option value="07">Julho</option>
+            <option value="08">Agosto</option>
+            <option value="09">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+        </select>
+
+        <button onclick="carregarDespesas()">Aplicar filtros</button>
     </div>
 
     <div class="card">
@@ -46,26 +64,81 @@
 
 <script src="db.js"></script>
 <script src="app.js"></script>
+
 <script>
+function carregarCategorias() {
+    const select = document.getElementById("categoria");
+    select.innerHTML = "";
+
+    const fixas = ["Alimentação", "Transporte", "Contas", "Lazer", "Saúde", "Outros"];
+
+    fixas.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+    });
+
+    listarCategorias(cats => {
+        cats.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.nome;
+            opt.textContent = c.nome + " (custom)";
+            select.appendChild(opt);
+        });
+    });
+}
+
+function novaCategoria() {
+    const nome = prompt("Nome da nova categoria:");
+    if (nome) {
+        adicionarCategoria(nome);
+        carregarCategorias();
+    }
+}
+
 function carregarDespesas() {
     listarDespesas(despesas => {
-        const lista = document.getElementById("lista");
-        lista.innerHTML = "";
-        let total = 0;
+        const filtroData = document.getElementById("filtroData").value;
+        const filtroMes = document.getElementById("filtroMes").value;
 
-        despesas.forEach(d => {
-            total += d.valor;
-            const item = document.createElement("div");
-            item.className = "item";
-            item.innerHTML = `
-                <span>${d.descricao}</span>
-                <span class="valor">R$ ${d.valor.toFixed(2)}</span>
-            `;
-            lista.appendChild(item);
-        });
+        let filtradas = despesas;
 
-        localStorage.setItem("total", total);
+        if (filtroData) filtradas = filtradas.filter(d => d.data === filtroData);
+        if (filtroMes) filtradas = filtradas.filter(d => d.data.split("-")[1] === filtroMes);
+
+        renderizarLista(filtradas);
     });
+}
+
+function renderizarLista(despesas) {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    despesas.forEach(d => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+            <span>${d.descricao} — <b>${d.categoria}</b></span>
+            <span class="valor">R$ ${d.valor.toFixed(2)}</span>
+        `;
+        lista.appendChild(item);
+    });
+}
+
+function adicionar() {
+    const desc = document.getElementById("descricao").value;
+    const val = document.getElementById("valor").value;
+    const cat = document.getElementById("categoria").value;
+    const data = new Date().toISOString().split("T")[0];
+
+    if (!desc || !val) {
+        alert("Preencha todos os campos");
+        return;
+    }
+
+    salvarDespesa(desc, val, cat, data);
+    carregarDespesas();
 }
 
 function sair() {
